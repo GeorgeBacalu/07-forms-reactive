@@ -7,13 +7,47 @@
           2) Mail (should not be a empty and a valid email)
           3) Project Status Dropdown, with three values: 'Stable', 'Critical', 'Finished'
           4) Submit Button
-
           Add your own Validator which doesn't allow "Test" as a Project Name
-
           Also implement that Validator as an async Validator (replace the other one)
-
           Upon submitting the form, simply print the value to the console
       -->
+      <form (ngSubmit)="onSubmit()" [formGroup]="projectForm">
+        <div formGroupName="project">
+          <div class="form-group">
+            <label for="name">Project Name</label>
+            <input type="text" id="name" formControlName="name" class="form-control" />
+            <span *ngIf="getProjectNameControl().invalid && getProjectNameControl().touched" class="help-block">
+              <span *ngIf="getProjectNameControl().errors['required']">This field is required!</span>
+              <span *ngIf="getProjectNameControl().errors['invalidProjectName']">This project name is invalid!</span>
+            </span>
+          </div>
+          <div class="form-group">
+            <label for="status"> Project Status</label>
+            <select name="status" id="status" formControlName="status" class="form-control">
+              <option *ngFor="let status of statuses" [value]="status">{{ status }}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" formControlName="email" class="form-control" />
+          <span *ngIf="getEmailControl().invalid && getEmailControl().touched" class="help-block">
+            <span *ngIf="getEmailControl().errors['required']">This field is required!</span>
+            <span *ngIf="getEmailControl().errors['email']">Please enter a valid email!</span>
+          </span>
+        </div>
+        <span *ngIf="projectForm.invalid && projectForm.touched" class="help-block">Please enter valid data!</span>
+        <button type="submit" class="btn btn-primary" [disabled]="projectForm.invalid">Submit</button>
+      </form>
+    </div>
+  </div>
+  <hr />
+  <div class="row" *ngIf="submitted">
+    <div class="col-xs-12">
+      <h3>Your Data</h3>
+      <p>Project Name: {{ user.projectName }}</p>
+      <p>Email: {{ user.email }}</p>
+      <p>Project Status: {{ user.projectStatus }}</p>
     </div>
   </div>
 </div>
